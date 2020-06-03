@@ -178,8 +178,8 @@ Mars.day = 24.6597*3600. #Mean length of solar day [s]
 Mars.obliquity = 25.19*(np.pi/180.) #Obliquity to orbit [radians]
 Mars.Lequinox = None #Longitude of equinox [deg]
 ####TAKEN FROM MOON
-Mars.Lp = 251.*np.pi/180. # Longitude of perihelion [radian]
-#`
+Mars.Lp = 251.*np.pi/180. # Longitude of perihelion [radians]
+#
 Mars.Tsavg = 210. #Mean surface temperature [K]
 Mars.Tsmax = 295. #Maximum surface temperature [K]
 # Thermophysical properties (TAKEN FROM THE MOON):
@@ -189,12 +189,12 @@ Mars.kd = 3e-2 # Solid (phonon) conductivity at depth z>>H [W.m.K-1]
 Mars.rhos = 1100. # Density at surface [kg.m-3]
 Mars.rhod = 1800. # Density at depth z>>H [kg.m-3]
 Mars.H = 0.07 # e-folding scale of conductivity and density [m]
-Mars.cp0 = 600. # heat capacity at average surface temp. [J.kg.K-1]
+Mars.cp0 = 600. # heat capacity at average surface temp. [J.kg-1.K-1]
 Mars.cpCoeff = [8.9093e-9,-1.234e-5,\
                 2.3616e-3,2.7431,-3.6125] # Heat capacity polynomial coefficients
 
-Mars.ice_cp0 = 900 # heat capacity of ice at average surface temp. [J.kg.K-1]
-Mars.ice_cpCoeff = [90.0,7.49] # Heat capacity of ice polynomial coefficients
+Mars.ice_cp0 = 900 # heat capacity of ice at average surface temp. [J.kg-1.K-1]
+Mars.ice_cpCoeff = [7.49, 90.0] # Heat capacity of ice polynomial coefficients
 
 #----------------------------------------------------        
 Jupiter = Planet()

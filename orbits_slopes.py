@@ -60,16 +60,28 @@ def cosSlopeSolarZenith(lat, dec, h, alpha, beta):
     #Positive 'alpha' with an azimuth of 0 degrees is a north-facing slope, and is south-facing when the azimuth is 180 degrees
     
     #First calculate solar azimuth
-    ######Known Issue: np.arccos() returns nan if simulation is started at nu=90deg because argument equals sightly less than -1
+    arg = (np.sin(dec)-cosz*np.sin(lat)) / (sinz*np.cos(lat))
+    #Make sure argument of np.arccos() is within [-1,1]
+    if (arg < -1.):
+        arg = -1.
+    elif (arg > 1.):
+        arg = 1.
+        
+    #Original calculation of solar azimuth angle. Worked for calculations, but was not correct.
+    #if (h >= 0. and h <=np.pi):
+    #    sa = np.arccos( arg )
+    #if (h > np.pi and h <=2.*np.pi):
+    #    sa = -np.arccos( arg )
+        
     if (h >= 0. and h <=np.pi):
-        sa = np.arccos( (np.sin(dec)-cosz*np.sin(lat)) / (sinz*np.cos(lat)) )
+        sa = 2.*np.pi - np.arccos( arg )
     if (h > np.pi and h <=2.*np.pi):
-        sa = -np.arccos( (np.sin(dec)-cosz*np.sin(lat)) / (sinz*np.cos(lat)) )
+        sa = np.arccos( arg )
     
     #Now calculate difference between solar azimuth and slope azimuth
     a = sa - beta
     
-    #cosine of solar azimuth above slope
+    #cosine of solar zenith above slope
     #if statement ensures that polar night will be observed
     if (cosz <= 0):
         cos_slope = 0
@@ -79,5 +91,20 @@ def cosSlopeSolarZenith(lat, dec, h, alpha, beta):
     #Clipping function = zero when sun is below local slope horizon
     y = 0.5*(cos_slope + np.abs(cos_slope))
     
-    return y
+    return y, sa
+
+def orbitParamsAtmo(model):
+
+    a = model.planet.rAU
+    ecc = model.planet.eccentricity
+    nu = model.nu_atm
+    obliq = model.planet.obliquity
     
+    # Useful parameter:
+    x = a*(1 - ecc**2)
+    
+    # Distance to Sun
+    model.r_atm = x/(1 + ecc*np.cos(nu))
+    
+    # Angular velocity
+    model.nudot_atm = model.r_atm**-2 * np.sqrt(GM*x)
